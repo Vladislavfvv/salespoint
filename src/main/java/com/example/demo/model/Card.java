@@ -24,7 +24,7 @@ private Long id;
     private String holderName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_system_id", referencedColumnName = "id", nullable = false)
-    private PaymentSystem paymentSystemId; //ссылка на плат сист
+    @JoinColumn(name = "payment_system", referencedColumnName = "id", nullable = false)
+    private PaymentSystem paymentSystem; //ссылка на плат сист
 
 }

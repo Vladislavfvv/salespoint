@@ -24,17 +24,17 @@ public class Transaction {
     private BigDecimal sum;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_type_id", referencedColumnName = "id", nullable = false)
-    private TransactionType transactionTypeId;  //change!!!
+    @JoinColumn(name = "transaction_type", referencedColumnName = "id", nullable = false)
+    private TransactionType transactionType;  //change!!!
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", referencedColumnName = "id", nullable = false)
-    private Card cardId;  //change!!!
+    @JoinColumn(name = "card", referencedColumnName = "id", nullable = false)
+    private Card card;  //change!!!
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "terminal_id", referencedColumnName = "id", nullable = false)
-    private Terminal terminalId;  //change!!!
+    @JoinColumn(name = "terminal", referencedColumnName = "id", nullable = false)
+    private Terminal terminal;  //change!!!
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "response_code_id", referencedColumnName = "id", nullable = false)
-    private ResponseCode responseCodeId;  //change!!!
+    @JoinColumn(name = "response_code", referencedColumnName = "id", nullable = false)
+    private ResponseCode responseCode;  //change!!!
     @Column(name = "authorization_code", length = 6, nullable = false)
     private String authorizationCode;
 
