@@ -35,12 +35,7 @@ public class AcquiringBankController {
 
     @PostMapping
     public ResponseEntity<?> saveAcquiringBank(@RequestBody @Valid AcquiringBankDto acquiringBank) {
-        Optional<AcquiringBankDto> acquiringBankDtoOptional = acquiringBankService.save(acquiringBank);
-        if (acquiringBankDtoOptional.isPresent()) {
-            return ResponseEntity.ok(acquiringBankDtoOptional.get());
-        } else {
-            return ResponseEntity.badRequest().body("AcquiringBank with that parameters is exists");
-        }
+        return ResponseEntity.ok(acquiringBankService.save(acquiringBank));
     }
 
     @PutMapping("/{id}")
@@ -50,6 +45,27 @@ public class AcquiringBankController {
                 .orElse(ResponseEntity.badRequest().build());
     }
 
+    @PostMapping("/createTableAcquiringBank")
+    public ResponseEntity<String> createTableAcquiringBank() {
+        log.info("Creating table acquiring bank");
+        if (acquiringBankService.createTable()) {
+            return ResponseEntity.ok("Successfully created table AcquiringBank");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to create table AcquiringBank");
+        }
+    }
+
+    @PostMapping("/fillTableAcquiringBank")
+    public ResponseEntity<String> fillTableAcquiringBank() {
+        log.info("Filling table acquiring bank");
+        createTableAcquiringBank();
+        if (acquiringBankService.initializeTable()) {
+            return ResponseEntity.ok("Successfully filled table AcquiringBank");
+        } else {
+            return ResponseEntity.status(500).body("Failed to fill table AcquiringBank");
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<AcquiringBankDto> delete(@PathVariable Long id) {
         return acquiringBankService.delete(id)
@@ -57,20 +73,10 @@ public class AcquiringBankController {
                 : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/createTableAcquiringBank")
-    public ResponseEntity<String> createTableAcquiringBank(){
-        log.info("Creating table acquiring bank");
-        if(acquiringBankService.createTable()) {
-            return ResponseEntity.ok("Successfully created table AcquiringBank");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to create table AcquiringBank");
-        }
-    }
-
     @DeleteMapping("/clearTableAcquiringBank")
-    public ResponseEntity<String> clearTableAcqiringBank(){
+    public ResponseEntity<String> clearTableAcqiringBank() {
         log.info("Clearing table acquiring bank");
-        if(acquiringBankService.deleteAll()){
+        if (acquiringBankService.deleteAll()) {
             return ResponseEntity.ok("Successfully cleared table AcquiringBank");
         } else {
             return ResponseEntity.status(500).body("Failed to clear table AcquiringBank");
@@ -78,22 +84,12 @@ public class AcquiringBankController {
     }
 
     @DeleteMapping("/dropTableAcquiringBank")
-    public ResponseEntity<String> dropTableAcquiringBank(){
+    public ResponseEntity<String> dropTableAcquiringBank() {
         log.info("Dropping table acquiring bank");
-        if(acquiringBankService.dropTable()){
+        if (acquiringBankService.dropTable()) {
             return ResponseEntity.ok("Successfully dropped table AcquiringBank");
         } else {
             return ResponseEntity.status(500).body("Failed to dropped table AcquiringBank");
-        }
-    }
-
-    @PostMapping("/fillTableAcquiringBank")
-    public ResponseEntity<String> fillTableAcquiringBank(){
-        log.info("Filling table acquiring bank");
-        if(acquiringBankService.initializeTable()){
-            return ResponseEntity.ok("Successfully filled table AcquiringBank");
-        } else {
-            return ResponseEntity.status(500).body("Failed to fill table AcquiringBank");
         }
     }
 }

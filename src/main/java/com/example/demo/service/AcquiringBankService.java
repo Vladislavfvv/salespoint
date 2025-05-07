@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.AcquiringBankDto;
 import com.example.demo.mapper.AcquiringBankMapper;
+import com.example.demo.model.AcquiringBank;
 import com.example.demo.repository.AcquiringBankRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +59,7 @@ public class AcquiringBankService {
             entityDto.setAbbreviatedName(dto.getAbbreviatedName());
             acquiringBankRepository.save(acquiringBankMapper.toEntity(entityDto));
             log.info("Acquiring bank {} updated", id);
-            return Optional.of(dto);
+            return Optional.of(entityDto);
         } else {
             log.info("Acquiring bank {} not found", id);
             return Optional.empty();

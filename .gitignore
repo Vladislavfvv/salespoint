@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# PostgreSQL data folder
+/salespoint-data/*
+!/salespoint-data/.gitkeep
