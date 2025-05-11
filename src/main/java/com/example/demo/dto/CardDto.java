@@ -19,7 +19,9 @@ public class CardDto {
     @NotBlank(message = "holderName is required")
     @Size(max = 50, message = "holderName must be at most 50 characters")
     private String holderName;
+    //@NotNull(message = "paymentSystemId ID is required")
+    //private Long paymentSystemId;
     @NotNull(message = "paymentSystemId ID is required")
-    private Long paymentSystemId;
+    private PaymentSystemDto paymentSystem;
 }
 

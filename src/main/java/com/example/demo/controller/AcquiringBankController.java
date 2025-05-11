@@ -18,6 +18,7 @@ import java.util.Optional;
 @RequestMapping("/api/acquringBanks")
 public class AcquiringBankController {
 
+
     @Autowired
     private AcquiringBankService acquiringBankService;
 
@@ -39,7 +40,7 @@ public class AcquiringBankController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AcquiringBankDto> update(@PathVariable("id") Long id, @RequestBody @Valid AcquiringBankDto acquiringBankDto) {
+    public ResponseEntity<AcquiringBankDto> updateAcquiringBank(@PathVariable("id") Long id, @RequestBody @Valid AcquiringBankDto acquiringBankDto) {
         return acquiringBankService.update(id, acquiringBankDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
@@ -67,14 +68,14 @@ public class AcquiringBankController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<AcquiringBankDto> delete(@PathVariable Long id) {
+    public ResponseEntity<AcquiringBankDto> deleteAcquiringBank(@PathVariable Long id) {
         return acquiringBankService.delete(id)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/clearTableAcquiringBank")
-    public ResponseEntity<String> clearTableAcqiringBank() {
+    public ResponseEntity<String> clearTableAcquiringBank() {
         log.info("Clearing table acquiring bank");
         if (acquiringBankService.deleteAll()) {
             return ResponseEntity.ok("Successfully cleared table AcquiringBank");

@@ -17,9 +17,9 @@ public class Terminal {
     @Column(name = "terminal_id", length = 9, nullable = false)
     private String terminalId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mcc", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "mcc_id", referencedColumnName = "id", nullable = false)
     private MerchantCategoryCode mcc;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "salesPoint", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "sales_point_id", referencedColumnName = "id", nullable = false)
     private SalesPoint salesPoint;
 }

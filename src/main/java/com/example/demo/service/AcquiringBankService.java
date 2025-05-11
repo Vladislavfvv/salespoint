@@ -54,11 +54,11 @@ public class AcquiringBankService {
         if (existing.isPresent()) {
             AcquiringBankDto entityDto = existing.get();
 
-            entityDto.setId(null);
+            //  entityDto.setId(null);
             entityDto.setBic(dto.getBic());
             entityDto.setAbbreviatedName(dto.getAbbreviatedName());
             acquiringBankRepository.save(acquiringBankMapper.toEntity(entityDto));
-            log.info("Acquiring bank {} updated", id);
+            log.info("Acquiring bank {} updated", entityDto.getId());
             return Optional.of(entityDto);
         } else {
             log.info("Acquiring bank {} not found", id);

@@ -21,6 +21,6 @@ public class SalesPoint {
     @Column(name = "pos_inn", length = 12, nullable = false)
     private String posInn;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "acquiring_bank", referencedColumnName = "id", nullable = false)
-    public AcquiringBank acquiringBank; //ok
+    @JoinColumn(name = "acquiring_bank_id", referencedColumnName = "id", nullable = false)
+    private AcquiringBank acquiringBank; //ok
 }

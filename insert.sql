@@ -1,6 +1,6 @@
 INSERT INTO salespointschema.user_access(user_login, user_password, full_name, user_role)
-VALUES ('administrator', '111', 'Administrator''s full name', 'administrator'),
-       ('manager', '222', 'Manager''s full name', 'user');
+VALUES ('administrator', '111', 'Administrators full name', 'administrator'),
+       ('manager', '222', 'Managers full name', 'user');
 
 insert into salespointschema.payment_system (payment_system_name)
 values ('VISA International Service Association'),
@@ -34,7 +34,7 @@ VALUES ('5309', 'Беспошлинные магазины Duty Free'),
 
 INSERT INTO salespointschema.terminal (terminal_id,
                                              mcc_id,
-                                             pos_id)
+                                       sales_point_id)
 VALUES ('00000001', 1, 1),
        ('00000002', 2, 2),
        ('00000003', 3, 3);
@@ -73,5 +73,5 @@ INSERT INTO salespointschema.transaction (transaction_date,
                                                 terminal_id,
                                                 response_code_id,
                                                 authorization_code)
-VALUES ('2022-10-22', 10.11, 'Cash deposit', 1, 2, 1, 2),
-       ('2022-04-06', 50.92, 'Cash deposit', 2, 2, 2, 3);
+VALUES ('2022-10-22', 10.11, 1, 1, 2, 1, 2),
+       ('2022-04-06', 50.92, 1, 2, 2, 2, 3);

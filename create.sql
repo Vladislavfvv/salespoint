@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS salespointschema.terminal
     terminal_id varchar(9) UNIQUE not null,
     mcc_id      bigint REFERENCES salespointschema.merchant_category_code (id) ON DELETE CASCADE
         ON UPDATE CASCADE,
-    pos_id      bigint REFERENCES salespointschema.sales_point (id) ON DELETE CASCADE
+    sales_point_id      bigint REFERENCES salespointschema.sales_point (id) ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
@@ -96,7 +96,6 @@ CREATE TABLE IF NOT EXISTS salespointschema.transaction
     response_code_id           bigint REFERENCES salespointschema.response_code ON DELETE CASCADE
         ON UPDATE CASCADE,
     authorization_code         varchar(6)
-
 );
 
 

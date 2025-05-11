@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -16,5 +17,8 @@ public class SalesPointDto {
     @NotBlank(message = "posInn is required")
     @Size(min = 12, max = 12, message = "posInn must be exactly 12 characters")
     private String posInn;
-    private Long acquiringBankId;
+    //    @NotNull(message = "paymentSystemId ID is required")
+    //    private Long acquiringBankId;
+    @NotNull(message = "AcquiringBankId ID is required")
+    private AcquiringBankDto acquiringBank;
 }
