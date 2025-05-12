@@ -31,5 +31,5 @@ public interface AcquiringBankRepository extends JpaRepository<AcquiringBank, Lo
                    "('041234567','ПАО Банк-эквайер №1')," +
                    "('041234568','ПАО Банк-эквайер №2')," +
                    "('041234569','ПАО Банк-эквайер №3') ON CONFLICT (bic) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 }

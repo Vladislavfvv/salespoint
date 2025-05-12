@@ -24,10 +24,10 @@ public class UserAccess { //Назначение: Хранит информац�
     private String userPassword;
 
     @Column(name = "full_name", length = 255, nullable = false)
-    private BigDecimal fullName;
+    private String fullName;
 
     @Column(name = "user_role", length = 255, nullable = false)
-    private BigDecimal userRole;
+    private String userRole;
 }
 
 

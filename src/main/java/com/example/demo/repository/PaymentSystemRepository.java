@@ -30,7 +30,7 @@ public interface PaymentSystemRepository extends JpaRepository<PaymentSystem, Lo
                    "('American Express')," +
                    "('Diners Club International')," +
                    "('China UnionPay') ON CONFLICT (payment_system_name) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 
 }
 

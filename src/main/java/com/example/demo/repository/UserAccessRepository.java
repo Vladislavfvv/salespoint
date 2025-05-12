@@ -2,10 +2,14 @@ package com.example.demo.repository;
 
 import com.example.demo.model.UserAccess;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface UserAccessRepository extends JpaRepository<UserAccess, Long> {
@@ -29,5 +33,7 @@ public interface UserAccessRepository extends JpaRepository<UserAccess, Long> {
     @Query(value = "INSERT INTO salespointschema.user_access(user_login, user_password, full_name, user_role) VALUES " +
                    "('administrator', '111', 'Administrators full name', 'administrator')," +
                    "('manager', '222', 'Managers full name', 'user') ON CONFLICT (user_login) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
+
+    Optional<UserAccess> findByUserLogin(@NotBlank(message = "userLogin is required") @Size(max = 255, message = "userLogin must be at most 255 characters") String userLogin);
 }

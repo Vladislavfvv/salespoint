@@ -44,5 +44,5 @@ public interface SalesPointRepository extends JpaRepository<SalesPoint, Long> {
                    "       ('Shop №2 ', 'City, 2-st 2 ', '159148777777', 3),\n" +
                    "       ('Shop №3', 'City, 3-st 3 ', '123596222222', 1)" +
                    "ON CONFLICT (pos_inn) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 }

@@ -36,5 +36,5 @@ public interface ResponseCodeRepository extends JpaRepository<ResponseCode, Long
                    "('41', 'карта утеряна, изъять', 'критическая'),\n" +
                    "('51', 'недостаточно средств на счёте', 'сервисная или аппаратная ошибка'),\n" +
                    "('55', 'неправильный PIN', 'не критическая') ON CONFLICT (error_code) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 }

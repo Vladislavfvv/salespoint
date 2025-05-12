@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.UserAccessDto;
 import com.example.demo.mapper.UserAccessMapper;
+import com.example.demo.model.UserAccess;
 import com.example.demo.repository.UserAccessRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,34 +36,36 @@ public class UserAccessService {
 
     @Transactional
     public Optional<UserAccessDto> save(UserAccessDto dto) {
-        Optional<UserAccessDto> exiting = findById(dto.getId());
-        if (exiting.isPresent()) {
+        // Optional<UserAccessDto> exiting = userAccessRepository.findById(dto.getId()).map(userAccessMapper::toDto);
+        Optional<UserAccessDto> existing = userAccessRepository.findByUserLogin(dto.getUserLogin()).map(userAccessMapper::toDto);
+        if (existing.isPresent()) {
             log.info("User access already exists with id: {}", dto.getId());
             return Optional.empty();
         } else {
             dto.setId(null);
-            userAccessRepository.saveAndFlush(userAccessMapper.toEntity(dto));
+            UserAccess saved = userAccessRepository.saveAndFlush(userAccessMapper.toEntity(dto));
             log.info("User access successfully saved");
-            return Optional.of(dto);
+            return Optional.ofNullable(userAccessMapper.toDto(saved));
         }
     }
 
     @Transactional
     public Optional<UserAccessDto> update(Long id, UserAccessDto dto) {
-        Optional<UserAccessDto> exiting = findById(id);
+        Optional<UserAccessDto> exiting = userAccessRepository.findById(id).map(userAccessMapper::toDto);
         if (exiting.isPresent()) {
             UserAccessDto exitingDto = exiting.get();
             // exiting.get().setId(dto.getId());
-            exitingDto.setId(dto.getId());
+            // exitingDto.setId(dto.getId());
             exitingDto.setUserLogin(dto.getUserLogin());
             exitingDto.setUserPassword(dto.getUserPassword());
             exitingDto.setFillName(dto.getFillName());
             exitingDto.setUserRole(dto.getUserRole());
             userAccessRepository.save(userAccessMapper.toEntity(exitingDto));
-            log.info("UserAccess with id: {} successfully updated", dto.getId());
-            return Optional.of(dto);
+            // log.info("UserAccess with id: {} successfully updated", exitingDto.getId());
+            log.info("UserAccess with id: {} successfully updated", userAccessMapper.toEntity(exitingDto));
+            return Optional.of(exitingDto);
         } else {
-            log.info("User access already exists with id: {}", id);
+            log.info("User access not found with id: {}", id);
             return Optional.empty();
         }
     }

@@ -41,5 +41,5 @@ public interface TerminalRepository extends JpaRepository<Terminal, Long> {
                    "       ('00000002', 2, 2),\n" +
                    "       ('00000003', 3, 3)" +
                    "ON CONFLICT (terminal_id) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 }

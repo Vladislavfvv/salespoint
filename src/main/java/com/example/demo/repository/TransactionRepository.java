@@ -67,5 +67,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
                    "VALUES ('2022-10-22', 10.11, 1, 1, 2, 1, 2)," +
                    "       ('2022-04-06', 50.92, 1, 2, 2, 2, 3)" +
                    "ON CONFLICT (transaction_date, sum, transaction_type_id, card_id, terminal_id, response_code_id) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 }

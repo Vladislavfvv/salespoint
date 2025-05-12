@@ -39,7 +39,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
                    "VALUES ('4123450000000019', '2025-12-31', 'IVAN I. IVANOV', 2 ),\n" +
                    "('5123450000000024', '2025-12-31', 'SEMION E. PETROV', 3) " +
                    "ON CONFLICT (card_number) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 
 
 }

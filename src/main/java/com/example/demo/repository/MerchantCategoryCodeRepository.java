@@ -31,5 +31,5 @@ public interface MerchantCategoryCodeRepository extends JpaRepository<MerchantCa
                    "('5691', 'Магазины мужской и женской одежды')," +
                    "('5812', 'Места общественного питания, рестораны')," +
                    "('5814', 'Фастфуд') ON CONFLICT (mcc) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 }

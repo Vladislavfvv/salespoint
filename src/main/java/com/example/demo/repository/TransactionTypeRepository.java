@@ -29,5 +29,5 @@ public interface TransactionTypeRepository extends JpaRepository<TransactionType
     @Query(value = "INSERT INTO salespointschema.transaction_type (transaction_type_name, operator)\n" +
                    "VALUES ('Списание со счета ', '-'),\n" +
                    "       ('Пополнение счета', '+') ON CONFLICT (transaction_type_name) DO NOTHING", nativeQuery = true)
-    int insertDefaultValues();
+    void insertDefaultValues();
 }
