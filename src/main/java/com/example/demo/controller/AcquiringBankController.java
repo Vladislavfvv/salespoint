@@ -4,6 +4,7 @@ import com.example.demo.dto.AcquiringBankDto;
 import com.example.demo.model.AcquiringBank;
 import com.example.demo.repository.AcquiringBankRepository;
 import com.example.demo.service.AcquiringBankService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class AcquiringBankController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Обновление данных банка-эквайера", description = "Обновляет инфу о банке-эквайере")
     public ResponseEntity<AcquiringBankDto> updateAcquiringBank(@PathVariable("id") Long id, @RequestBody @Valid AcquiringBankDto acquiringBankDto) {
         return acquiringBankService.update(id, acquiringBankDto)
                 .map(ResponseEntity::ok)
