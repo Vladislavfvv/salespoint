@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +25,13 @@ public class AcquiringBankController {
     private AcquiringBankService acquiringBankService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<AcquiringBankDto>> getAllAcquiringBanks() {
         return ResponseEntity.ok(acquiringBankService.findAll());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<AcquiringBankDto> getAcquiringBankById(@PathVariable("id") Long id) {
         return acquiringBankService.findById(id)
                 .map(ResponseEntity::ok)
@@ -36,11 +39,13 @@ public class AcquiringBankController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> saveAcquiringBank(@RequestBody @Valid AcquiringBankDto acquiringBank) {
         return ResponseEntity.ok(acquiringBankService.save(acquiringBank));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Обновление данных банка-эквайера", description = "Обновляет инфу о банке-эквайере")
     public ResponseEntity<AcquiringBankDto> updateAcquiringBank(@PathVariable("id") Long id, @RequestBody @Valid AcquiringBankDto acquiringBankDto) {
         return acquiringBankService.update(id, acquiringBankDto)
@@ -49,6 +54,7 @@ public class AcquiringBankController {
     }
 
     @PostMapping("/createTableAcquiringBank")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createTableAcquiringBank() {
         log.info("Creating table acquiring bank");
         if (acquiringBankService.createTable()) {
@@ -59,6 +65,7 @@ public class AcquiringBankController {
     }
 
     @PostMapping("/fillTableAcquiringBank")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> fillTableAcquiringBank() {
         log.info("Filling table acquiring bank");
         createTableAcquiringBank();
@@ -70,6 +77,7 @@ public class AcquiringBankController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AcquiringBankDto> deleteAcquiringBank(@PathVariable Long id) {
         return acquiringBankService.delete(id)
                 ? ResponseEntity.noContent().build()
@@ -77,6 +85,7 @@ public class AcquiringBankController {
     }
 
     @DeleteMapping("/clearTableAcquiringBank")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> clearTableAcquiringBank() {
         log.info("Clearing table acquiring bank");
         if (acquiringBankService.deleteAll()) {
@@ -87,6 +96,7 @@ public class AcquiringBankController {
     }
 
     @DeleteMapping("/dropTableAcquiringBank")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> dropTableAcquiringBank() {
         log.info("Dropping table acquiring bank");
         if (acquiringBankService.dropTable()) {

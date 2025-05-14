@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.security;
 
 import com.example.demo.model.UserAccess;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class UserDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getUserRole().toUpperCase()));
     }
-
+//Spring Security автоматически добавляет префикс ROLE_, поэтому hasRole('ADMIN') — это проверка на "ROLE_ADMIN"
     @Override
     public String getPassword() {
         return user.getUserPassword();

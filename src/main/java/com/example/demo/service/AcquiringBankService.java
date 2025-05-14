@@ -37,33 +37,64 @@ public class AcquiringBankService {
 
     @Transactional
     public Optional<AcquiringBankDto> save(AcquiringBankDto dto) {
-        Optional<AcquiringBankDto> exiting = findById(dto.getId());
-        if (exiting.isPresent()) {
-            log.info("Acquiring bank {} already exists", dto.getId());
+//        Optional<AcquiringBankDto> exiting = findById(dto.getId());
+//        if (exiting.isPresent()) {
+//            log.info("Acquiring bank {} already exists", dto.getId());
+//            return Optional.empty();
+//        }
+//        dto.setId(null);
+//        acquiringBankRepository.saveAndFlush(acquiringBankMapper.toEntity(dto));
+//        log.info("Acquiring bank {} saved", dto.getId());
+//        return Optional.of(dto);
+        // Если ID задан — проверяем, не существует ли уже банк
+        Optional<AcquiringBank> exiting = acquiringBankRepository.findByBic(dto.getBic());
+        if(exiting.isPresent()) {
+            log.info("Acquiring bank with ID {} already exists", dto.getId());
             return Optional.empty();
         }
-        dto.setId(null);
-        acquiringBankRepository.saveAndFlush(acquiringBankMapper.toEntity(dto));
-        log.info("Acquiring bank {} saved", dto.getId());
-        return Optional.of(dto);
+//        if (dto.getId() != null && acquiringBankRepository.findByBic(dto.getBic())) {
+//        //if (dto.getId() != null && acquiringBankRepository.existsById(dto.getId())) {
+//            log.info("Acquiring bank with ID {} already exists", dto.getId());
+//            return Optional.empty();
+//        }
+
+        // Преобразуем DTO в сущность и сохраняем
+        AcquiringBank entity = acquiringBankMapper.toEntity(dto);
+        entity.setId(null); // Явно обнуляем ID, чтобы JPA сгенерировала новый
+
+        AcquiringBank saved = acquiringBankRepository.saveAndFlush(entity); // теперь saved содержит сгенерированный ID
+
+        log.info("Acquiring bank {} saved", saved.getId());
+        return Optional.of(acquiringBankMapper.toDto(saved));
     }
+
+//    @Transactional
+//    public Optional<AcquiringBankDto> update(Long id, AcquiringBankDto dto) {
+//        Optional<AcquiringBankDto> existing = findById(id);
+//        if (existing.isPresent()) {
+//            AcquiringBankDto entityDto = existing.get();
+//
+//            //  entityDto.setId(null);
+//            entityDto.setBic(dto.getBic());
+//            entityDto.setAbbreviatedName(dto.getAbbreviatedName());
+//            acquiringBankRepository.save(acquiringBankMapper.toEntity(entityDto));
+//            log.info("Acquiring bank {} updated", entityDto.getId());
+//            return Optional.of(entityDto);
+//        } else {
+//            log.info("Acquiring bank {} not found", id);
+//            return Optional.empty();
+//        }
+//    }
 
     @Transactional
     public Optional<AcquiringBankDto> update(Long id, AcquiringBankDto dto) {
-        Optional<AcquiringBankDto> existing = findById(id);
-        if (existing.isPresent()) {
-            AcquiringBankDto entityDto = existing.get();
-
-            //  entityDto.setId(null);
-            entityDto.setBic(dto.getBic());
-            entityDto.setAbbreviatedName(dto.getAbbreviatedName());
-            acquiringBankRepository.save(acquiringBankMapper.toEntity(entityDto));
-            log.info("Acquiring bank {} updated", entityDto.getId());
-            return Optional.of(entityDto);
-        } else {
-            log.info("Acquiring bank {} not found", id);
-            return Optional.empty();
-        }
+        return acquiringBankRepository.findById(id).map(entity -> {
+            entity.setBic(dto.getBic());
+            entity.setAbbreviatedName(dto.getAbbreviatedName());
+            AcquiringBank saved = acquiringBankRepository.save(entity);
+            log.info("Acquiring bank {} updated", saved.getId());
+            return acquiringBankMapper.toDto(saved);
+        });
     }
 
     @Transactional
