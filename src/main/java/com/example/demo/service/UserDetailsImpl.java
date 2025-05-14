@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.service;
 
 import com.example.demo.model.UserAccess;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
@@ -29,4 +28,9 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return user.getUserLogin();
     }
+
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
 }

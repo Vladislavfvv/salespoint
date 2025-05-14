@@ -31,8 +31,8 @@ public interface UserAccessRepository extends JpaRepository<UserAccess, Long> {
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO salespointschema.user_access(user_login, user_password, full_name, user_role) VALUES " +
-                   "('administrator', '111', 'Administrators full name', 'administrator')," +
-                   "('manager', '222', 'Managers full name', 'user') ON CONFLICT (user_login) DO NOTHING", nativeQuery = true)
+                   "('administrator', '111', 'Administrators full name', 'ADMIN')," +
+                   "('manager', '222', 'Managers full name', 'USER') ON CONFLICT (user_login) DO NOTHING", nativeQuery = true)
     void insertDefaultValues();
 
     Optional<UserAccess> findByUserLogin(@NotBlank(message = "userLogin is required") @Size(max = 255, message = "userLogin must be at most 255 characters") String userLogin);
