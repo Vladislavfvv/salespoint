@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   postgres:
@@ -13,6 +13,23 @@ services:
     volumes:
       - ./salespoint-data:/var/lib/postgresql/data
       - ./initdb:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:latest
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin  #чтобы сохранялись настройки
 
     # Добавляем Swagger UI
   swagger-ui:
@@ -29,3 +46,5 @@ services:
       # SWAGGER_JSON: http://ваш_сервис_апи:порт/v3/api-docs
     depends_on:
       - postgres  # Зависит от Postgres (если API зависит от БД)
+volumes:
+  pgadmin_data: #в конце — обязательны для определения pgadmin_data

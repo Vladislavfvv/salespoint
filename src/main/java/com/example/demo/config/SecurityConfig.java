@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -61,13 +60,18 @@ public class SecurityConfig {
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                    .requestMatchers("/user/**").hasRole("USER")
-                    .anyRequest().authenticated()
+                    .requestMatchers("/register", "/login", "/css/**", "/js/**").permitAll()
+                    .requestMatchers("/public/**").permitAll()      // Публичные маршруты
+                    .requestMatchers("/admin/**").hasRole("ADMIN")  //Только для ADMIN
+                    .requestMatchers("/user/**").hasRole("USER")    //USER и ADMIN
+                    .anyRequest().authenticated()                   //  Остальное требует авторизации
             )
             .formLogin(form -> form
+                    .loginPage("/login")                    // указать страницу логина явно
                     .successHandler(successHandler)
+                    .permitAll()                            // разрешить всем доступ к форме логина
             )
+            .httpBasic(Customizer.withDefaults()) // <-- включаем basic auth
             .logout(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable());
 

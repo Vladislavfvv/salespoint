@@ -8,6 +8,7 @@ import com.example.demo.repository.PaymentSystemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +27,16 @@ public class CardService {
     @Autowired
     private PaymentSystemRepository paymentSystemRepository;
 
+    @Cacheable(value = "allCardCache")
     public List<CardDto> findAll() {
         return cardRepository.findAll()
                 .stream().map(cardMapper::toDto)
                 .collect(Collectors.toList());
     }
 
+    // Кеширует банк по id
+    // Если уже есть результат — возвращает его из кеша.
+    @Cacheable(value = "cardByIdCache", key = "#id")
     public Optional<CardDto> findById(Long id) {
         return cardRepository.findById(id)
                 .map(cardMapper::toDto);

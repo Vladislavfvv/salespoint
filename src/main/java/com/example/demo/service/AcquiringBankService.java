@@ -7,6 +7,8 @@ import com.example.demo.repository.AcquiringBankRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,19 +25,41 @@ public class AcquiringBankService {
     @Autowired
     private final AcquiringBankMapper acquiringBankMapper;
 
+    // Кеширует список всех банков
+    @Cacheable(value = "allBanksCache")
     public List<AcquiringBankDto> findAll() {
+        simulateSlowService(); // (для демонстрации задержки)
         return acquiringBankRepository.findAll()
                 .stream()
                 .map(acquiringBankMapper::toDto)
                 .collect(Collectors.toList());
     }
 
+    // Задержка для демонстрации кеша
+    private void simulateSlowService() {
+        long start = System.currentTimeMillis();
+        log.info("Slow getting info from service. Start time: {}", start);
+        try {
+            Thread.sleep(5000L);
+            long end = System.currentTimeMillis();
+            log.info("Slow getting info from service. End time{}", end);
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    // Кеширует банк по id
+    // Если уже есть результат — возвращает его из кеша.
+    @Cacheable(value = "bankByIdCache", key = "#id")
     public Optional<AcquiringBankDto> findById(Long id) {
+        simulateSlowService(); // (для демонстрации задержки)
         return acquiringBankRepository.findById(id)
                 .map(acquiringBankMapper::toDto);
     }
 
     @Transactional
+    // Удаление из кеша при сохранении нового банка
+    @CacheEvict(value = {"allBanksCache", "bankByIdCache"}, allEntries = true)
     public Optional<AcquiringBankDto> save(AcquiringBankDto dto) {
 //        Optional<AcquiringBankDto> exiting = findById(dto.getId());
 //        if (exiting.isPresent()) {
@@ -48,7 +72,7 @@ public class AcquiringBankService {
 //        return Optional.of(dto);
         // Если ID задан — проверяем, не существует ли уже банк
         Optional<AcquiringBank> exiting = acquiringBankRepository.findByBic(dto.getBic());
-        if(exiting.isPresent()) {
+        if (exiting.isPresent()) {
             log.info("Acquiring bank with ID {} already exists", dto.getId());
             return Optional.empty();
         }
@@ -87,6 +111,8 @@ public class AcquiringBankService {
 //    }
 
     @Transactional
+    // Очистка кеша при обновлении
+    @CacheEvict(value = {"allBanksCache", "bankByIdCache"}, allEntries = true)
     public Optional<AcquiringBankDto> update(Long id, AcquiringBankDto dto) {
         return acquiringBankRepository.findById(id).map(entity -> {
             entity.setBic(dto.getBic());
@@ -98,6 +124,8 @@ public class AcquiringBankService {
     }
 
     @Transactional
+    // Очистка кеша при удалении
+    @CacheEvict(value = {"allBanksCache", "bankByIdCache"}, allEntries = true)
     public boolean delete(Long id) {
         Optional<AcquiringBankDto> exiting = findById(id);
         if (exiting.isPresent()) {
@@ -111,6 +139,8 @@ public class AcquiringBankService {
     }
 
     @Transactional
+    // Очистка кеша при удалении
+    @CacheEvict(value = {"allBanksCache", "bankByIdCache"}, allEntries = true)
     public boolean deleteAll() {
         try {
             acquiringBankRepository.deleteAll();
@@ -123,6 +153,8 @@ public class AcquiringBankService {
     }
 
     @Transactional
+    // Очистка кеша при удалении
+    @CacheEvict(value = {"allBanksCache", "bankByIdCache"}, allEntries = true)
     public boolean dropTable() {
         try {
             acquiringBankRepository.dropTable();
@@ -135,6 +167,8 @@ public class AcquiringBankService {
     }
 
     @Transactional
+    // Удаляет из кеша (частично или полностью) при изменении данных.
+    @CacheEvict(value = {"allBanksCache", "bankByIdCache"}, allEntries = true)
     public boolean createTable() {
         try {
             acquiringBankRepository.createTable();
@@ -147,6 +181,8 @@ public class AcquiringBankService {
     }
 
     @Transactional
+    // Очистка кеша при удалении
+    @CacheEvict(value = {"allBanksCache", "bankByIdCache"}, allEntries = true)
     public boolean initializeTable() {
         if (!createTable()) {
             return false;

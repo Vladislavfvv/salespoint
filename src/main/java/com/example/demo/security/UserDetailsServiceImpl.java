@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+//Аутентификация через БД
+//UserDetailsService реализацией UserDetailsServiceImpl загружает данные пользователя
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserAccess userAccess = userAccessRepository.findByUserLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        return new UserDetailsImpl(userAccess);
+        return new UserDetailsImpl(userAccess); // Преобразование UserAccess в UserDetails
     }
 }

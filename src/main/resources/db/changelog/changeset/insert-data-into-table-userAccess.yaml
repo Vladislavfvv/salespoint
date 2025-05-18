@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: "insert-data-into-table-userAccess"
+      author: "Vlad"
+      changes:
+        - insert:
+            tableName: "user_access"
+            schemaName: "salespointschema"
+            columns:
+              - column:
+                  name: "user_login"
+                  value: "administrator"
+              - column:
+                  name: "user_password"
+                  value: "111"
+              - column:
+                  name: "full_name"
+                  value: "Administrators full name"
+              - column:
+                  name: "user_role"
+                  value: "ADMIN"
+        - insert:
+            tableName: "user_access"
+            columns:
+              - column:
+                  name: "user_login"
+                  value: "manager"
+              - column:
+                  name: "user_password"
+                  value: "222"
+              - column:
+                  name: "full_name"
+                  value: "Managers full name"
+              - column:
+                  name: "user_role"
+                  value: "USER"

@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+
+//редирект после входа
+//Определяет URL для перенаправления после успешного входа
+//Разные маршруты для ролей ADMIN/USER
 @Slf4j
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {

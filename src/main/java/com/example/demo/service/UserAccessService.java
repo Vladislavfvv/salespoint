@@ -5,9 +5,7 @@ import com.example.demo.mapper.UserAccessMapper;
 import com.example.demo.model.UserAccess;
 import com.example.demo.repository.UserAccessRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,12 +14,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+
 public class UserAccessService {
-    @Autowired
     private final UserAccessRepository userAccessRepository;
-    @Autowired
     private final UserAccessMapper userAccessMapper;
+
+    public UserAccessService(UserAccessRepository userAccessRepository, UserAccessMapper userAccessMapper) {
+        this.userAccessRepository = userAccessRepository;
+        this.userAccessMapper = userAccessMapper;
+    }
 
     public List<UserAccessDto> findAll() {
         return userAccessRepository.findAll()
@@ -58,7 +59,7 @@ public class UserAccessService {
             // exitingDto.setId(dto.getId());
             exitingDto.setUserLogin(dto.getUserLogin());
             exitingDto.setUserPassword(dto.getUserPassword());
-            exitingDto.setFillName(dto.getFillName());
+            exitingDto.setFullName(dto.getFullName());
             exitingDto.setUserRole(dto.getUserRole());
             userAccessRepository.save(userAccessMapper.toEntity(exitingDto));
             // log.info("UserAccess with id: {} successfully updated", exitingDto.getId());

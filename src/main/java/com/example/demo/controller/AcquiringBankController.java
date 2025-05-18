@@ -5,6 +5,8 @@ import com.example.demo.model.AcquiringBank;
 import com.example.demo.repository.AcquiringBankRepository;
 import com.example.demo.service.AcquiringBankService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +19,31 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/acquringBanks")
+@RequestMapping("/api/acquiringBanks")
 public class AcquiringBankController {
 
 
     @Autowired
     private AcquiringBankService acquiringBankService;
 
+
+    @Operation(summary = "Получить все AcquiringBank")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешный ответ"),
+            @ApiResponse(responseCode = "404", description = "AcquiringBank не найдены")
+    })
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<AcquiringBankDto>> getAllAcquiringBanks() {
         return ResponseEntity.ok(acquiringBankService.findAll());
     }
 
+
+    @Operation(summary = "Получить AcquiringBank по id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешный ответ"),
+            @ApiResponse(responseCode = "404", description = "AcquiringBank не найден")
+    })
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<AcquiringBankDto> getAcquiringBankById(@PathVariable("id") Long id) {
@@ -53,6 +67,12 @@ public class AcquiringBankController {
                 .orElse(ResponseEntity.badRequest().build());
     }
 
+
+    @Operation(summary = "Сохранить AcquiringBank")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Успешный ответ"),
+            @ApiResponse(responseCode = "400", description = "AcquiringBank не сохранен")
+    })
     @PostMapping("/createTableAcquiringBank")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createTableAcquiringBank() {
