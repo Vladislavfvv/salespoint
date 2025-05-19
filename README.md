@@ -93,3 +93,11 @@ docker run --name redis -p 6379:6379 -d redis
 ```bash
 docker exec -it salespoint ping configuration-server
 ```
+
+---
+
+## В приложении реализованы регистрация и авторизация через форму по URL:
+- Регистрация: [http://localhost:9050/register](http://localhost:9050/register)
+- Регистрация: [http://localhost:9050/login](http://localhost:9050/login)
+
+
