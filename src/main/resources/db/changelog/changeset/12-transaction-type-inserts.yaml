@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12-insert-transaction-types
+      author: Vlad
+      changes:
+        - insert:
+            schemaName: salespointschema
+            tableName: transaction_type
+            columns:
+              - column: { name: transaction_type_name, value: 'Списание со счета ' }
+              - column: { name: operator, value: '-' }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: transaction_type
+            columns:
+              - column: { name: transaction_type_name, value: 'Пополнение счета' }
+              - column: { name: operator, value: '+' }

@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6-insert-acquiring-bank-defaults
+      author: Vlad
+      changes:
+        - insert:
+            schemaName: salespointschema
+            tableName: acquiring_bank
+            columns:
+              - column:
+                  name: bic
+                  value: '041234567'
+              - column:
+                  name: abbreviated_name
+                  value: 'ПАО Банк-эквайер №1'
+        - insert:
+            schemaName: salespointschema
+            tableName: acquiring_bank
+            columns:
+              - column:
+                  name: bic
+                  value: '041234568'
+              - column:
+                  name: abbreviated_name
+                  value: 'ПАО Банк-эквайер №2'
+        - insert:
+            schemaName: salespointschema
+            tableName: acquiring_bank
+            columns:
+              - column:
+                  name: bic
+                  value: '041234569'
+              - column:
+                  name: abbreviated_name
+                  value: 'ПАО Банк-эквайер №3'

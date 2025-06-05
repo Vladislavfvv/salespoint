@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20-transaction-inserts
+      author: Vlad
+      changes:
+        - insert:
+            schemaName: salespointschema
+            tableName: transaction
+            columns:
+              - column: { name: transaction_date, value: '2022-10-22' }
+              - column: { name: sum, value: 10.11 }
+              - column: { name: transaction_type_id, valueNumeric: 1 }
+              - column: { name: card_id, valueNumeric: 1 }
+              - column: { name: terminal_id, valueNumeric: 2 }
+              - column: { name: response_code_id, valueNumeric: 1 }
+              - column: { name: authorization_code, value: '2' }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: transaction
+            columns:
+              - column: { name: transaction_date, value: '2022-04-06' }
+              - column: { name: sum, value: 50.92 }
+              - column: { name: transaction_type_id, valueNumeric: 1 }
+              - column: { name: card_id, valueNumeric: 2 }
+              - column: { name: terminal_id, valueNumeric: 2 }
+              - column: { name: response_code_id, valueNumeric: 2 }
+              - column: { name: authorization_code, value: '3' }

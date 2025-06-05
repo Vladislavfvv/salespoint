@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15-create-card-table
+      author: Vlad
+      changes:
+        - createTable:
+            tableName: card
+            schemaName: salespointschema
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: card_number
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+              - column:
+                  name: expiration_date
+                  type: date
+              - column:
+                  name: holder_name
+                  type: varchar(50)
+              - column:
+                  name: payment_system_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableSchemaName: salespointschema
+            baseTableName: card
+            baseColumnNames: payment_system_id
+            referencedTableSchemaName: salespointschema
+            referencedTableName: payment_system
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            constraintName: fk_card_payment_system

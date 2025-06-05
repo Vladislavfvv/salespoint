@@ -1,0 +1,79 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19-transaction-create-table
+      author: Vlad
+      changes:
+        - createTable:
+            tableName: transaction
+            schemaName: salespointschema
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: transaction_date
+                  type: date
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: sum
+                  type: decimal
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: transaction_type_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_transaction_type
+                    references: salespointschema.transaction_type(id)
+                    onDelete: CASCADE
+                    onUpdate: CASCADE
+
+              - column:
+                  name: card_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_card
+                    references: salespointschema.card(id)
+                    onDelete: CASCADE
+                    onUpdate: CASCADE
+
+              - column:
+                  name: terminal_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_terminal
+                    references: salespointschema.terminal(id)
+                    onDelete: CASCADE
+                    onUpdate: CASCADE
+
+              - column:
+                  name: response_code_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_response_code
+                    references: salespointschema.response_code(id)
+                    onDelete: CASCADE
+                    onUpdate: CASCADE
+
+              - column:
+                  name: authorization_code
+                  type: varchar(6)
+                  constraints:
+                    nullable: true
+
+        - addUniqueConstraint:
+            tableName: transaction
+            schemaName: salespointschema
+            columnNames: transaction_date, sum, transaction_type_id, card_id, terminal_id, response_code_id
+            constraintName: unique_transaction_fields

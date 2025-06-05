@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10-insert-merchant-category-codes
+      author: Vlad
+      changes:
+        - insert:
+            schemaName: salespointschema
+            tableName: merchant_category_code
+            columns:
+              - column: { name: mcc, value: '5309' }
+              - column: { name: mcc_name, value: 'Беспошлинные магазины Duty Free' }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: merchant_category_code
+            columns:
+              - column: { name: mcc, value: '5651' }
+              - column: { name: mcc_name, value: 'Одежда для всей семьи' }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: merchant_category_code
+            columns:
+              - column: { name: mcc, value: '5691' }
+              - column: { name: mcc_name, value: 'Магазины мужской и женской одежды' }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: merchant_category_code
+            columns:
+              - column: { name: mcc, value: '5812' }
+              - column: { name: mcc_name, value: 'Места общественного питания, рестораны' }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: merchant_category_code
+            columns:
+              - column: { name: mcc, value: '5814' }
+              - column: { name: mcc_name, value: 'Фастфуд' }

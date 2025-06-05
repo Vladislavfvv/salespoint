@@ -2,49 +2,57 @@
 
 services:
   postgres:
-    image: postgres:16
-    container_name: salespoint
+    image: 'postgres:latest'
+    restart: always
+    container_name: 'salespoint'
     environment:
+      POSTGRES_DB: salespoint
       POSTGRES_USER: lesson
       POSTGRES_PASSWORD: lesson
-      POSTGRES_DB: salespoint
     ports:
-      - "5440:5432"
+      - "5460:5432"
     volumes:
+#      - ./salespoint-data:/var/lib/postgresql/data
+#      - ./initdb:/docker-entrypoint-initdb.d
+
+      - ./sql/create-schemas.sql:/docker-entrypoint-initdb.d/01_create_schemas.sql
       - ./salespoint-data:/var/lib/postgresql/data
-      - ./initdb:/docker-entrypoint-initdb.d
 
   redis:
     image: redis:latest
-    container_name: redis_cache
+    restart: always
+    container_name: redis_cache_sp
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin
+    restart: always
+    container_name: pgadmin_sp
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8080:80"
+      - "8060:80"
     volumes:
-      - pgadmin_data:/var/lib/pgadmin  #чтобы сохранялись настройки
+      - pgadmin_data_sp:/var/lib/pgadmin  #чтобы сохранялись настройки
 
     # Добавляем Swagger UI
   swagger-ui:
     image: swaggerapi/swagger-ui
+    restart: always
     container_name: salespoint-swagger-ui
     ports:
-      - "8085:8080"
+      - "8095:8080"
     environment:
       # Указываем URL вашего OpenAPI-документа (JSON/YAML)
       # Если API запущено локально (не в Docker) — используйте host.docker.internal
       SWAGGER_JSON: http://host.docker.internal:9050/v3/api-docs
+      VALIDATOR_URL: "null"
       # это путь к апи сервиса
       # ИЛИ если API в этом же compose-файле — укажите имя сервиса:
       # SWAGGER_JSON: http://ваш_сервис_апи:порт/v3/api-docs
-    depends_on:
-      - postgres  # Зависит от Postgres (если API зависит от БД)
+    # depends_on:
+    #  - postgres  # Зависит от Postgres (если API зависит от БД)
 volumes:
-  pgadmin_data: #в конце — обязательны для определения pgadmin_data
+  pgadmin_data_sp: #в конце — обязательны для определения pgadmin_data

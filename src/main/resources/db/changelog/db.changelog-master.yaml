@@ -1,5 +1,41 @@
 databaseChangeLog:
     - include:
-        file: db/changelog/changeset/create-table-userAccess.yaml
+          file: db/changelog/changeset/1-create-table-userAccess.yaml
     - include:
-        file: db/changelog/changeset/insert-data-into-table-userAccess.yaml
+          file: db/changelog/changeset/2-insert-data-into-table-userAccess.yaml
+    - include:
+          file: db/changelog/changeset/3-payment-system-create-table.yaml
+    - include:
+          file: db/changelog/changeset/4-payment-system-inserts.yaml
+    - include:
+          file: db/changelog/changeset/5-acquiring-bank-create-table.yaml
+    - include:
+          file: db/changelog/changeset/6-acquiring-bank-inserts.yaml
+    - include:
+          file: db/changelog/changeset/7-sales-point-create-table.yaml
+    - include:
+          file: db/changelog/changeset/8-sales-point-inserts.yaml
+    - include:
+          file: db/changelog/changeset/9-merchant-category-code-create-table.yaml
+    - include:
+          file: db/changelog/changeset/10-merchant-category-code-inserts.yaml
+    - include:
+          file: db/changelog/changeset/11-transaction-type-create-table.yaml
+    - include:
+          file: db/changelog/changeset/12-transaction-type-inserts.yaml
+    - include:
+          file: db/changelog/changeset/13-terminal-create-table.yaml
+    - include:
+          file: db/changelog/changeset/14-terminal-inserts.yaml
+    - include:
+          file: db/changelog/changeset/15-card-create-table.yaml
+    - include:
+          file: db/changelog/changeset/16-card-inserts.yaml
+    - include:
+          file: db/changelog/changeset/17-response_code-create-table.yaml
+    - include:
+          file: db/changelog/changeset/18-response_code-inserts.yaml
+    - include:
+          file: db/changelog/changeset/19-transaction-create-table.yaml
+    - include:
+          file: db/changelog/changeset/20-transaction-inserts.yaml

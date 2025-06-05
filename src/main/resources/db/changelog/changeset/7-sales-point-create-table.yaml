@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7-create-sales-point-table
+      author: your_name
+      changes:
+        - createTable:
+            schemaName: salespointschema
+            tableName: sales_point
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: pos_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pos_address
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pos_inn
+                  type: varchar(12)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: acquiring_bank_id
+                  type: bigint
+                  constraints:
+                    referencedTableName: acquiring_bank
+                    referencedColumnNames: id
+                    foreignKeyName: fk_sales_point_bank
+                    deleteCascade: true
+                    updateCascade: true

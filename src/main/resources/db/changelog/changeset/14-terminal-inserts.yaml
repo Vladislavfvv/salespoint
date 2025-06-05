@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14-insert-terminals
+      author: Vlad
+      changes:
+        - insert:
+            schemaName: salespointschema
+            tableName: terminal
+            columns:
+              - column: { name: terminal_id, value: '00000001' }
+              - column: { name: mcc_id, valueNumeric: 1 }
+              - column: { name: sales_point_id, valueNumeric: 1 }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: terminal
+            columns:
+              - column: { name: terminal_id, value: '00000002' }
+              - column: { name: mcc_id, valueNumeric: 2 }
+              - column: { name: sales_point_id, valueNumeric: 2 }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: terminal
+            columns:
+              - column: { name: terminal_id, value: '00000003' }
+              - column: { name: mcc_id, valueNumeric: 3 }
+              - column: { name: sales_point_id, valueNumeric: 3 }

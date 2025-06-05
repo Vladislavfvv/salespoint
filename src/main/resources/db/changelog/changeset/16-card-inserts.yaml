@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16-insert-cards
+      author: Vlad
+      changes:
+        - insert:
+            schemaName: salespointschema
+            tableName: card
+            columns:
+              - column: { name: card_number, value: '4123450000000019' }
+              - column: { name: expiration_date, valueDate: '2025-12-31' }
+              - column: { name: holder_name, value: 'IVAN I. IVANOV' }
+              - column: { name: payment_system_id, valueNumeric: 2 }
+
+        - insert:
+            schemaName: salespointschema
+            tableName: card
+            columns:
+              - column: { name: card_number, value: '5123450000000024' }
+              - column: { name: expiration_date, valueDate: '2025-12-31' }
+              - column: { name: holder_name, value: 'SEMION E. PETROV' }
+              - column: { name: payment_system_id, valueNumeric: 3 }
