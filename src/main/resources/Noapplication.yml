@@ -1,0 +1,17 @@
+#spring:
+#  application:
+#    name: sales-point
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#  instance:
+#    prefer-ip-address: true
+#
+#retry:
+#  max-attempts: 3
+#  backoff-period: 100
+#
+#server:
+#  port: 8083

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 21-drop-unique-transaction-fields
+      author: Vlad
+      changes:
+        - dropUniqueConstraint:
+            schemaName: salespointschema
+            tableName: transaction
+            constraintName: unique_transaction_fields

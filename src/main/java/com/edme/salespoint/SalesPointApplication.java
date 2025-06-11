@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "com.edme.salespoint.models")
 @EnableJpaRepositories(basePackages = "com.edme.salespoint.repository")
 @EnableDiscoveryClient
+
 public class SalesPointApplication {
 
     public static void main(String[] args) {

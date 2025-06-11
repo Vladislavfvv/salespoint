@@ -86,6 +86,10 @@ public class AcquiringBankService implements AbstractService<Long, AcquiringBank
             entity.setBic(dto.getBic());
             entity.setAbbreviatedName(dto.getAbbreviatedName());
             AcquiringBank saved = acquiringBankRepository.save(entity);
+            if (saved == null) {
+                log.warn("Saving acquiring bank failed for id: {}", id);
+                return null;
+            }
             log.info("Acquiring bank {} updated", saved.getId());
             return acquiringBankMapper.toDto(saved);
         });

@@ -1,14 +1,18 @@
 package com.edme.salespoint.service;
 
+import com.edme.commondto.dto.TransactionExchangeDto;
 import com.edme.salespoint.dto.TransactionDto;
+import com.edme.salespoint.mapper.TransactionExchangeMapper;
 import com.edme.salespoint.mapper.TransactionMapper;
 import com.edme.salespoint.model.Transaction;
 import com.edme.salespoint.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +23,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransactionService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
-    @Autowired
-    private TransactionMapper transactionMapper;
+    private final TransactionRepository transactionRepository;
+    private final TransactionMapper transactionMapper;
+    private final TransactionExchangeMapper transactionExchangeMapper;
 
     public List<TransactionDto> findAll() {
         return transactionRepository.findAll()
@@ -35,20 +38,74 @@ public class TransactionService {
                 .map(transactionMapper::toDto);
     }
 
+
     @Transactional
     public Optional<TransactionDto> save(TransactionDto dto) {
-        Optional<TransactionDto> transaction = findById(dto.getId());
-        if (transaction.isPresent()) {
-            log.info("Transaction {} already exists", dto.getId());
-            return Optional.empty();
+        // Если id в DTO задан, проверяем, есть ли такая транзакция в базе
+        if (dto.getId() != null) {
+            Optional<TransactionDto> transaction = findById(dto.getId());
+            if (transaction.isPresent()) {
+                log.info("Transaction {} already exists", dto.getId());
+                return Optional.empty();
+            }
+        }
+
+        // Сбрасываем id, чтобы гарантировать создание новой записи
+        dto.setId(null);
+
+        Transaction entity = transactionMapper.toEntity(dto);
+        transactionRepository.saveAndFlush(entity);
+
+        log.info("Transaction saved with id {}", entity.getId());
+        return Optional.of(transactionMapper.toDto(entity));
+    }
+
+
+//    @Transactional
+//    public Optional<TransactionDto> save(TransactionDto dto) {
+//        Optional<TransactionDto> transaction = findById(dto.getId());
+//        if (transaction.isPresent()) {
+//            log.info("Transaction {} already exists", dto.getId());
+//            return Optional.empty();
+//        } else {
+//            dto.setId(null);
+//
+//            Transaction entity = transactionMapper.toEntity(dto);
+//            transactionRepository.saveAndFlush(entity);
+//
+//            log.info("Transaction {} saved", dto.getId());
+//            return Optional.of(transactionMapper.toDto(entity));
+//        }
+//    }
+
+//    public String confirmAndSave(TransactionExchangeDto exchangeDto) {
+//        TransactionDto dto = transactionExchangeMapper.toTransactionDto(exchangeDto);
+//
+//        Optional<TransactionDto> result = save(dto);
+//
+//        if (result.isPresent()) {
+//            return "Transaction saved in sales-point: " + result.get().getId();
+//        } else {
+//            return "Transaction already exists in sales-point";
+//        }
+//    }
+
+    @Transactional
+    public TransactionExchangeDto processExternalTransaction(TransactionExchangeDto exchangeDto) {
+        // Конвертируем TransactionExchangeDto в TransactionDto
+        TransactionDto transactionDto = transactionExchangeMapper.toTransactionDto(exchangeDto);
+        transactionDto.setId(null); //сброс чтобы сохранить под новым номером
+
+        // Сохраняем транзакцию
+        Optional<TransactionDto> savedTransaction = save(transactionDto);
+
+        if (savedTransaction.isPresent()) {
+            log.info("Transaction {} saved successfully", savedTransaction.get().getId());
+            // Конвертируем обратно в TransactionExchangeDto
+            return transactionExchangeMapper.toExchangeDto(savedTransaction.get());
         } else {
-            dto.setId(null);
-
-            Transaction entity = transactionMapper.toEntity(dto);
-            transactionRepository.saveAndFlush(entity);
-
-            log.info("Transaction {} saved", dto.getId());
-            return Optional.of(transactionMapper.toDto(entity));
+            log.warn("Transaction already exists with data: {}", exchangeDto);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Transaction already exists");
         }
     }
 
@@ -127,7 +184,7 @@ public class TransactionService {
 
     @Transactional
     public boolean initializeTable() {
-        if(!createTable()) {
+        if (!createTable()) {
             log.info("Error initializing table Transaction  cause table Transaction not created");
             return false;
         }

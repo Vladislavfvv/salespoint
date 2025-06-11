@@ -39,3 +39,5 @@ databaseChangeLog:
           file: db/changelog/changeset/19-transaction-create-table.yaml
     - include:
           file: db/changelog/changeset/20-transaction-inserts.yaml
+    - include:
+        file: db/changelog/changeset/21-drop-unique-transaction-fields.yaml

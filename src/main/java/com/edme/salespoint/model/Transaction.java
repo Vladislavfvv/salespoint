@@ -21,7 +21,6 @@ public class Transaction {
     private Date transactionDate;
     @Column(name = "sum")
     private BigDecimal sum;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_type_id", referencedColumnName = "id", nullable = false)
     private TransactionType transactionType;  //change!!!
@@ -36,5 +35,4 @@ public class Transaction {
     private ResponseCode responseCode;  //change!!!
     @Column(name = "authorization_code", length = 6, nullable = false)
     private String authorizationCode;
-
 }
