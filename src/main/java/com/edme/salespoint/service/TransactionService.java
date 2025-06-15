@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransactionService {
 
+    private final Tracer tracer;
     private final TransactionRepository transactionRepository;
     private final TransactionMapper transactionMapper;
     private final TransactionExchangeMapper transactionExchangeMapper;
@@ -39,25 +43,64 @@ public class TransactionService {
     }
 
 
+//    @Transactional
+//    public Optional<TransactionDto> save(TransactionDto dto) {
+//        // Если id в DTO задан, проверяем, есть ли такая транзакция в базе
+//        if (dto.getId() != null) {
+//            Optional<TransactionDto> transaction = findById(dto.getId());
+//            if (transaction.isPresent()) {
+//                log.info("Transaction {} already exists", dto.getId());
+//                return Optional.empty();
+//            }
+//        }
+//
+//        // Сбрасываем id, чтобы гарантировать создание новой записи
+//        dto.setId(null);
+//
+//        Transaction entity = transactionMapper.toEntity(dto);
+//        transactionRepository.saveAndFlush(entity);
+//
+//        log.info("Transaction saved with id {}", entity.getId());
+//        return Optional.of(transactionMapper.toDto(entity));
+//    }
+
+
     @Transactional
     public Optional<TransactionDto> save(TransactionDto dto) {
-        // Если id в DTO задан, проверяем, есть ли такая транзакция в базе
-        if (dto.getId() != null) {
-            Optional<TransactionDto> transaction = findById(dto.getId());
-            if (transaction.isPresent()) {
-                log.info("Transaction {} already exists", dto.getId());
-                return Optional.empty();
+        Span span = tracer.spanBuilder("TransactionService.save").startSpan();
+        try (Scope scope = span.makeCurrent()) {
+            span.setAttribute("transaction.request.id", String.valueOf(dto.getId()));
+            span.setAttribute("transaction.request.sum", dto.getSum() != null ? dto.getSum().toString() : "null");
+
+
+            // Если id в DTO задан, проверяем, есть ли такая транзакция в базе
+            if (dto.getId() != null) {
+                Optional<TransactionDto> transaction = findById(dto.getId());
+                if (transaction.isPresent()) {
+                    log.info("Transaction {} already exists", dto.getId());
+                    span.setStatus(io.opentelemetry.api.trace.StatusCode.UNSET, "Transaction already exists");
+                    return Optional.empty();
+                }
             }
+
+            // Сбрасываем id, чтобы гарантировать создание новой записи
+            dto.setId(null);
+
+            Transaction entity = transactionMapper.toEntity(dto);
+            transactionRepository.saveAndFlush(entity);
+
+            log.info("Transaction saved with id {}", entity.getId());
+            span.setAttribute("transaction.saved.id", String.valueOf(entity.getId()));
+            span.setStatus(io.opentelemetry.api.trace.StatusCode.OK, "Transaction saved");
+
+            return Optional.of(transactionMapper.toDto(entity));
+        } catch (Exception ex) {
+            span.recordException(ex);
+            span.setStatus(io.opentelemetry.api.trace.StatusCode.ERROR, "Error saving transaction");
+            throw ex;
+        } finally {
+            span.end();
         }
-
-        // Сбрасываем id, чтобы гарантировать создание новой записи
-        dto.setId(null);
-
-        Transaction entity = transactionMapper.toEntity(dto);
-        transactionRepository.saveAndFlush(entity);
-
-        log.info("Transaction saved with id {}", entity.getId());
-        return Optional.of(transactionMapper.toDto(entity));
     }
 
 
